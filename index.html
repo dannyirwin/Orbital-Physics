@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Orbital Physics</title>
+</head>
+
+<body>
+    <div id="hiddenCollapseBtn" class="control-btn" title="Toggle Control Panel view." onclick="handleToggleHidePanel()"><ion-icon name="menu-outline"></div>
+    <div id= "controlPanel" class="control-panel">
+        <section>
+            <div id="controlContainer">
+                <button id="collapseBtn" class="control-btn" title="Toggle Control Panel view." onclick="handleToggleHidePanel()"><ion-icon name="menu-outline"></ion-icon></button>
+                <button id="pauseBtn" class="control-btn" title="Toggle Play/Pause Simulation"><ion-icon name="pause-circle-outline"></ion-icon></button>
+                <div class="display-controls">
+                    <p>Display Options</p>
+                    <button id="displayPathBtn" class="view-btn" title="Toggle Orbital Path display."><ion-icon name="reload-outline"></ion-icon></button>
+                    <button id="displayVectorsBtn" class="view-btn" title="Toggle Vector display."><ion-icon name="swap-horizontal-outline"></ion-icon></button>
+                </div>
+            </div>
+            <nav id="toolSelectionContainer">
+                <p>Tools</p>
+                <button id="spawnBtn" class="nav-btn" title="Spawn Tool: Create and add new bodies to the Star Scape."><ion-icon name="planet-outline"></ion-icon></button>
+                <button id="deleteBtn" class="nav-btn" title="Delete Tool: Select and Delete bodies from the system"><ion-icon name="trash-outline"></ion-icon></button>
+                <!--<button id="inspectBtn" class="nav-btn" title="Inspection Tool: View and change selected bodies"><ion-icon name="search-outline"></ion-icon></button>-->
+                <button id="preSetBtn" class="nav-btn" title="Pre-Set Tool: View some pre-set systems"><ion-icon name="telescope-outline"></ion-icon></button>
+                <button id="infoBtn" class="nav-btn" title="Additional Information"><ion-icon name="information-circle-outline"></ion-icon></button>
+            </nav>
+        </section>
+        <section id="toolContainer">
+            <div id="spawnTool" class="tool hidden">
+                <h3>Spawn Tool</h3>
+                <p>Use this tools to drop new Celestial Bodies into the system. MASS is the only required input.</p>
+               <!-- <div class="sub-tool">
+                    <p>Pre-Set Bodies</p>
+                    <div class="sub-tool-item">
+                        <button value="asteroid">Asteroid</button>
+                        <button value="theMoon">The Moon</button>
+                        <button value="mars">Mars</button>
+                        <button value="earth">Earth</button>
+                        <button value="jupiter">Jupiter</button>
+                        <button value="sun">Sun</button>
+                    </div>
+                </div>-->
+                <div class="sub-tool">
+                    <label for="spawnName">Name:</label>
+                    <div class="sub-tool-item">
+                        <input type="text" id="spawnName" name="spawnName"  placeholder="Name of Celestial Body" oninput="spawnTool.updateName()">
+                    </div>
+                </div>
+                <div class="sub-tool">
+                    <p>Position:</p>
+                    <div class="sub-tool-item">
+                        <label for="spawnXPos"> x </label>
+                        <input type="number" id="spawnXPos" name="spawnXPos" placeholder="0-1000" min="0" oninput="spawnTool.updatePosition()" defaultValue="200">
+                        <label for="spawnYPos">y </label>
+                        <input type="number" id="spawnYPos" name="spawnYPos" placeholder="0-1000" min="0" oninput="spawnTool.updatePosition()" defaultValue="200"> 
+                    </div>
+                    <button id="spawnPosPickerBtn" onclick="spawnTool.toggleMousePositionMode()">Select position with Mouse</button>
+                </div>
+                <div class="sub-tool">
+                    <label for="spawnMassDec">Mass:</label>
+                    <p>Tip: at this scale, most bodies observable in our own solar system are from 1e20 to 1e31.</p>
+                    <div class="sub-tool-item">
+                        <input type="float" id="spawnMassDec" name="spawnMassDec" placeholder="0.01 - 9.99" min="0.01" max="9.99" oninput="spawnTool.updateMass()">
+                        <label for="spawnMassPow">e</label>
+                        <input type="number" id="spawnMassPow" name="spawnMassPow" placeholder="1 - 99" min="1" max="99" oninput="spawnTool.updateMass()">kg
+                    </div>
+                </div>
+                <div class="sub-tool">
+                    <p>Vector:</p>
+                    <div class="sub-tool-item">
+                        <label for="spawnVecStr">velocity</label>
+                        <input type="float" id="spawnVecStr" name="spawnVecStr" placeholder="0 or larger" min="0" oninput="spawnTool.updateVector()">e5 Km/simulation frame
+                    </div>
+                    <div class="sub-tool-item">
+                        <label for="spawnVecDir">direction</label>
+                        <input type="number" id="spawnVecDir" name="spawnVecDir" min='0'max='359' placeholder="0 - 359" oninput="spawnTool.updateVector()" defaultValue="0">deg
+                    </div>
+                </div>
+                <div class="sub-tool">
+                    <p>Color:</p>
+                    <div class="sub-tool-item">
+                        <div id="spawnColorDisplay"></div>
+                        <div id="spawnAtmosphereCheckboxDisplay" class="sub-tool-item">
+                            <label for="spawnHasAtmosphere">Has Atmosphere?</label>
+                            <input type="checkbox" id="spawnHasAtmosphere" name="spawnHasAtmosphere" oninput="spawnTool.updateColorFromSlider()">
+                        </div>
+                    </div>
+                    <div class=".color-container">
+                        <div class="sub-tool-item slider-container">
+                            <label for="spawnColorSlideR">R</label>
+                            <input type="range" min="0" max="255" value="255" class="slider" id="spawnColorSlideR" name="spawnColorSlideR" oninput="spawnTool.updateColorFromSlider()">
+                            <input type="number" min="0" max="255" value="255" class="single-color-value" id="spawnColorValR" name="spawnColorValR" onchange="spawnTool.updateColorFromNumber()">
+                    </div>
+                    <div class="sub-tool-item">
+                        <label for="spawnColorSlideG">G</label>
+                        <input type="range" min="0" max="255" value="255" class="slider" id="spawnColorSlideG" name="spawnColorSlideG" oninput="spawnTool.updateColorFromSlider()">
+                        <input type="number" min="0" max="255" value="255" class="single-color-value" id="spawnColorValG" name="spawnColorValG" oninput="spawnTool.updateColorFromNumber()">
+                    </div>
+                    <div class="sub-tool-item">
+                        <label for="spawnColorSlideB">B</label>
+                        <input type="range" min="0" max="255" value="255" class="slider" id="spawnColorSlideB" name="spawnColorSlideB" oninput="spawnTool.updateColorFromSlider()">
+                        <input type="number" min="0" max="255" value="255" class="single-color-value" id="spawnColorValB" name="spawnColorValB" oninput="spawnTool.updateColorFromNumber()">
+                    </div>
+                </div>
+                </div>
+                <div class="sub-tool">
+                    <div id="spawnErrorDisplay">
+                    </div>
+                    <button onclick="spawnTool.spawnBody()">Spawn Celestial Body</button>
+                </div>
+            </div>
+            <div id="deleteTool" class="tool hidden">
+                <h3>Delete Tool</h3>
+                <p>Click on a body to select it, and then press the delete button to remove it from the system.</p>
+                <div class="sub-tool">
+                    <button id="deleteButton" onclick="deleteTool.handleDeleteButton()">Select Body to Delete</button>
+                </div>
+                <div class="sub-tool">
+                    <button id="deleteAllButton" onclick="deleteTool.handleDeleteAllButton()">Delete All Bodies</button>
+                </div>
+            </div>
+            <div id="inspectTool" class="tool hidden">Inspection Tool: View and change aspects of existing bodies</div>
+            <div id="preSetTool"class="tool hidden">
+                <div class="sub-tool">
+                    <button id="preSet01" onclick="preSetTool.handleSpawnPreSet(this.id)">Three Body Problem</button>
+                    <button id="preSet02" onclick="preSetTool.handleSpawnPreSet(event)">Inner Solar System</button>
+                    <button id="preSet03" onclick="preSetTool.handleSpawnPreSet(event)">Chaotic Binary Star System</button>
+                </div>
+            </div>
+            <div id="infoTool" class="tool hidden">
+                <div class="sub-tool">
+                    <p>This project was inspired from the book The Tree Body Problem by Liu Cixin</p>
+                </div>
+                <div class="sub-tool">
+                    <p>
+                        The scale of the size Celestial Bodies is not accurate. They all appear significantly larger than their mass would allow at this scale and even the most massive stars would actually appear as small spots.
+                    </p>
+                </div>
+                <div class="sub-tool">
+                    <p>
+                        This does not solve the N Body Problem. The nature of the problem is that we have yet to develop truly accurate ways of accurately predicting the movements of more than two bodies significantly acting upon each other for extended lengths of time.
+                         This is more of a visualization of how gravity effects bodies with extremely broad accuracy.  And its fun to try to make pretty systems. 
+                    </p>
+                </div>
+                <div class="sub-tool">
+                    <p>The appearance of each body is based on windows of mass thresholds. If the body has enough mass to form the next body style.  For example, if the body has a mass greater than 2.3e27, it has enough mass to begin internal fusion and form a star.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+	<canvas id="mainCanvas" onclick="handleCanvasClickEvents(event)">Please use a different browser which supports the use of canvas</canvas>
+</body>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+<script src="./bower_components/victor/build/victor.js"></script>  <!--VICTOR is a script that adds 2d vector class and methods-->
+<script src="script.js"></script>
+
+</html>

@@ -1,0 +1,166 @@
+root: {
+	--color1: rgba(16, 79, 85, 1);
+	--color2: rgba(50, 116, 109, 1);
+	--color3: rgba(158, 197, 171, 1);
+	--color4: rgba(1, 32, 15, 1);
+	--color5: rgba(1, 21, 2, 1);
+	--background-color: rgba(158, 197, 171, 0.5);;
+}
+
+body {
+	background: black;
+	color: white;
+}
+
+canvas {
+	position:absolute;
+	top: 0;
+	left: 0;
+	z-index: -10;
+
+	background: black;
+}
+
+.control-panel {
+	background-color: var(--background-color);
+	border: white solid 2px;
+	max-width: 25vw;
+	max-height: 90vh;
+	float: right;
+	display: flex;
+	flex-direction: column;
+	transition: 0.5s;
+}
+
+#controlContainer {
+	display: flex;
+	align-content: center;
+}
+
+.display-controls {
+	border: 2px white dashed;
+	border-radius: 5px;
+	margin: 2px;
+}
+
+button {
+	font-size: 1em;
+	background: none;
+	color: white;
+	padding: none;
+	border-radius: 5px;
+	margin: 2px;
+	text-align: center;
+	text-justify: center;
+	padding: 5px;
+}
+
+.control-btn {
+	font-size:  2em;
+}
+
+.view-btn {
+	height: 2em;
+	width: 2em;
+}
+
+.nav-btn {
+	font-size:  1.5em;
+	border: 2px white sold;
+}
+
+ion-icon {
+	pointer-events: none;
+}
+
+.panel-hidden {
+	visibility: visible !important;
+	opacity: 1 !important;
+	width: 100vw;
+}
+
+#hiddenCollapseBtn {
+	visibility: collapse;
+	display: inline;
+	opacity: 0;
+	width: auto;
+	float: right;
+	transition: 0.5s;
+}
+
+.collapsed {
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.5s;
+}
+
+.disabled {
+	color: red;
+}
+
+.hidden {
+	visibility: hidden;
+	display: none;
+}
+
+.selected {
+	color: pink;
+}
+
+.tool {
+	overflow-y: scroll;
+	max-height: 70vh;
+	font-size: 0.75em;
+}
+
+
+.sub-tool {
+	padding: 2px 5px;
+	margin: 2px;
+	border-top: white 1px dashed;
+	display: flex;
+	flex-direction: column;
+}
+
+.sub-tool-item {
+	display: flex;
+	flex-wrap:wrap;
+	align-items: center;
+}
+
+
+p {
+	margin: 2px;
+}
+
+#spawnColorDisplay {
+	height: 2em;
+	width: 2em;
+	margin: 0.5em;
+	background: white;
+	border-radius: 5px;
+	justify-self:flex-start;
+}
+
+.colors-container {
+	display: flex;
+}
+
+.slider-container {
+	justify-self: flex-end;
+}
+
+
+/*Removes arrows from number inputs*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number],
+input[type=float] {
+  -moz-appearance: textfield;
+  width: 5em;
+  margin: 2px;
+}
